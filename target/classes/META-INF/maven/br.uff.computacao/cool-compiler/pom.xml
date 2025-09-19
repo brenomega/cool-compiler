@@ -7,6 +7,15 @@
 	<artifactId>cool-compiler</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -29,7 +38,8 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/generated-sources/jflex</outputDirectory>
+							<outputDirectory>
+								${project.build.directory}/generated-sources/jflex</outputDirectory>
 							<lexDefinitions>
 								<lexDefinition>src/main/jflex</lexDefinition>
 							</lexDefinitions>

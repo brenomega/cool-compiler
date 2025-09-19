@@ -4,6 +4,9 @@
 
 package compiler;
 
+import java.util.Map;
+import java.util.HashMap;
+
 
 @SuppressWarnings("fallthrough")
 public class Lexer {
@@ -16,6 +19,7 @@ public class Lexer {
 
   // Lexical states.
   public static final int YYINITIAL = 0;
+  public static final int COMMENT = 2;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -24,7 +28,7 @@ public class Lexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0, 0
+     0,  0,  1, 1
   };
 
   /**
@@ -61,7 +65,9 @@ public class Lexer {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\12\0\4\1\167\0\1\1\u01a2\0\2\1\326\0\u0100\1";
+    "\11\0\1\1\1\2\2\3\1\1\22\0\1\1\7\0"+
+    "\1\4\1\5\1\6\2\0\1\7\127\0\1\3\u01a2\0"+
+    "\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -88,10 +94,11 @@ public class Lexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1";
+    "\1\0\1\1\1\2\1\3\1\4\2\2\3\1\1\5"+
+    "\1\6\1\7\1\10";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[2];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -116,10 +123,11 @@ public class Lexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\2";
+    "\0\0\0\10\0\20\0\30\0\20\0\40\0\50\0\60"+
+    "\0\70\0\100\0\20\0\110\0\20\0\20";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[2];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -142,10 +150,13 @@ public class Lexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\3\0";
+    "\1\3\1\4\1\5\1\0\1\6\2\3\1\7\4\10"+
+    "\1\11\1\10\1\12\1\10\11\0\1\4\14\0\1\13"+
+    "\10\0\1\14\4\10\1\0\1\10\1\0\1\10\6\0"+
+    "\1\15\6\0\1\16\2\0\2\14\1\0\5\14";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[4];
+    int [] result = new int[80];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -188,10 +199,11 @@ public class Lexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11";
+    "\1\0\1\1\1\11\1\1\1\11\5\1\1\11\1\1"+
+    "\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[2];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -291,6 +303,32 @@ public class Lexer {
 			return type + "('" + value + "')";
 		}
 	}
+	
+	private static final Map<String, TokenType> KEYWORDS = new HashMap<>();
+	static {
+		KEYWORDS.put("class", TokenType.CLASS);
+		KEYWORDS.put("else", TokenType.ELSE);
+		KEYWORDS.put("fi", TokenType.FI);
+		KEYWORDS.put("if", TokenType.IF);
+		KEYWORDS.put("in", TokenType.IN);
+		KEYWORDS.put("inherits", TokenType.INHERITS);
+		KEYWORDS.put("isvoid", TokenType.ISVOID);
+		KEYWORDS.put("let", TokenType.LET);
+		KEYWORDS.put("loop", TokenType.LOOP);
+		KEYWORDS.put("pool", TokenType.POOL);
+		KEYWORDS.put("then", TokenType.THEN);
+		KEYWORDS.put("while", TokenType.WHILE);
+		KEYWORDS.put("case", TokenType.CASE);
+		KEYWORDS.put("esac", TokenType.ESAC);
+		KEYWORDS.put("new", TokenType.NEW);
+		KEYWORDS.put("of", TokenType.OF);
+		KEYWORDS.put("not", TokenType.NOT);
+		KEYWORDS.put("true", TokenType.TRUE);
+		KEYWORDS.put("false", TokenType.FALSE);
+	}
+	
+	private int commentDepth = 0;
+	private StringBuilder commentBuffer = new StringBuilder();
 
 
   /**
@@ -642,17 +680,70 @@ public class Lexer {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
-              {
-                return Token.eof();
-              }
+            switch (zzLexicalState) {
+            case YYINITIAL: {
+              return Token.eof();
+            }  // fall though
+            case 15: break;
+            case COMMENT: {
+              throw new Error("Comentário de bloco não terminado (EOF dentro de (* ... *))");
+            }  // fall though
+            case 16: break;
+            default:
+        return null;
+        }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
+            { commentBuffer.append(yytext());
+            }
+          // fall through
+          case 9: break;
+          case 2:
             { throw new Error("Caractere inválido: " + yytext());
             }
           // fall through
-          case 2: break;
+          case 10: break;
+          case 3:
+            { return new Token(TokenType.WHITESPACE, yytext());
+            }
+          // fall through
+          case 11: break;
+          case 4:
+            { yyline++;
+            }
+          // fall through
+          case 12: break;
+          case 5:
+            { commentDepth = 1;
+	commentBuffer.setLength(0);
+	commentBuffer.append(yytext());
+	yybegin(COMMENT);
+            }
+          // fall through
+          case 13: break;
+          case 6:
+            { return new Token(TokenType.COMMENT, yytext());
+            }
+          // fall through
+          case 14: break;
+          case 7:
+            { commentDepth++;
+	commentBuffer.append(yytext());
+            }
+          // fall through
+          case 15: break;
+          case 8:
+            { commentDepth--;
+	commentBuffer.append(yytext());
+	if (commentDepth == 0) {
+		yybegin(YYINITIAL);
+		return new Token(TokenType.COMMENT, commentBuffer.toString());
+	}
+            }
+          // fall through
+          case 16: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
