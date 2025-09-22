@@ -20,6 +20,7 @@ public class Lexer {
   // Lexical states.
   public static final int YYINITIAL = 0;
   public static final int COMMENT = 2;
+  public static final int STRING = 4;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -28,7 +29,7 @@ public class Lexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1, 1
+     0,  0,  1,  1,  2, 2
   };
 
   /**
@@ -65,8 +66,10 @@ public class Lexer {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\11\0\1\1\1\2\2\3\1\1\22\0\1\1\7\0"+
-    "\1\4\1\5\1\6\2\0\1\7\127\0\1\3\u01a2\0"+
+    "\11\0\1\1\1\2\2\3\1\4\22\0\1\1\1\0"+
+    "\1\5\5\0\1\6\1\7\1\10\2\0\1\11\2\0"+
+    "\1\12\53\0\1\13\5\0\1\14\3\0\1\14\7\0"+
+    "\1\14\3\0\1\14\1\0\1\14\20\0\1\3\u01a2\0"+
     "\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
@@ -94,11 +97,12 @@ public class Lexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\3\1\4\2\2\3\1\1\5"+
-    "\1\6\1\7\1\10";
+    "\1\0\1\1\1\0\1\2\1\3\1\4\1\5\2\2"+
+    "\3\1\1\6\2\7\1\10\1\2\1\11\1\12\1\13"+
+    "\1\14\1\15\2\16\1\17\1\20";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[14];
+    int [] result = new int[26];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -123,11 +127,13 @@ public class Lexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\10\0\20\0\30\0\20\0\40\0\50\0\60"+
-    "\0\70\0\100\0\20\0\110\0\20\0\20";
+    "\0\0\0\15\0\32\0\47\0\64\0\47\0\47\0\101"+
+    "\0\116\0\133\0\150\0\165\0\202\0\47\0\217\0\47"+
+    "\0\234\0\47\0\251\0\47\0\47\0\47\0\47\0\266"+
+    "\0\47\0\47";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[14];
+    int [] result = new int[26];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -150,13 +156,18 @@ public class Lexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\0\1\6\2\3\1\7\4\10"+
-    "\1\11\1\10\1\12\1\10\11\0\1\4\14\0\1\13"+
-    "\10\0\1\14\4\10\1\0\1\10\1\0\1\10\6\0"+
-    "\1\15\6\0\1\16\2\0\2\14\1\0\5\14";
+    "\1\4\1\5\1\6\1\0\1\5\1\7\1\10\2\4"+
+    "\1\11\3\4\6\12\1\13\1\12\1\14\4\12\2\15"+
+    "\1\16\1\15\1\17\1\20\5\15\1\21\1\15\16\0"+
+    "\1\5\2\0\1\5\20\0\1\22\15\0\1\23\3\0"+
+    "\6\12\1\0\1\12\1\0\4\12\10\0\1\24\13\0"+
+    "\1\25\5\0\2\15\1\0\1\15\2\0\5\15\1\0"+
+    "\1\15\2\0\1\16\12\0\2\26\1\27\1\26\1\30"+
+    "\1\31\4\26\1\32\2\31\2\23\1\0\12\23\2\0"+
+    "\1\27\12\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[80];
+    int [] result = new int[195];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -199,11 +210,11 @@ public class Lexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\1\1\11\1\1\1\11\5\1\1\11\1\1"+
-    "\2\11";
+    "\1\0\1\1\1\0\1\11\1\1\2\11\6\1\1\11"+
+    "\1\1\1\11\1\1\1\11\1\1\4\11\1\1\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[14];
+    int [] result = new int[26];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -283,6 +294,15 @@ public class Lexer {
   private boolean zzEOFDone;
 
   /* user code: */
+	// CONSTANTS
+	private static final int STRING_MAX_LENGTH = 1024;
+	
+	// BUFFERS
+	private int commentDepth = 0;
+	private StringBuilder commentBuffer = new StringBuilder();
+	private StringBuilder stringBuffer = new StringBuilder();
+	
+	// TOKEN DEFINITION
 	public enum TokenType {
 		OBJECTID, TYPEID, INT, STRING, PLUS, MINUS, TIMES, 
 		DIVIDE, LT, LE, EQ, ASSIGN, ARROW, AT, DOT, COLON,
@@ -304,6 +324,7 @@ public class Lexer {
 		}
 	}
 	
+	// KEYWORDS
 	private static final Map<String, TokenType> KEYWORDS = new HashMap<>();
 	static {
 		KEYWORDS.put("class", TokenType.CLASS);
@@ -327,8 +348,74 @@ public class Lexer {
 		KEYWORDS.put("false", TokenType.FALSE);
 	}
 	
-	private int commentDepth = 0;
-	private StringBuilder commentBuffer = new StringBuilder();
+	// BASE EXCEPTIONS
+	public class LexicalException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public LexicalException(String message) {
+			super(message);
+		}
+	}
+	
+	// EXCEPTIONS
+	public class StringTooLongException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+		
+	    public StringTooLongException(String message) {
+	        super(message);
+	    }
+	}
+	
+	public class UnterminatedStringException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public UnterminatedStringException(String message) {
+	    	super(message);
+	    }
+	}
+
+	public class NullCharInStringException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public NullCharInStringException(String message) {
+	    	super(message);
+	    }
+	}
+
+	public class UnterminatedCommentException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public UnterminatedCommentException(String message) {
+	    	super(message);
+	    }
+	}
+
+	public class InvalidCharException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public InvalidCharException(String message) {
+	    	super(message);
+	    }
+	}
+	
+	// UTIL
+	private String unescape(String s) { 
+		StringBuilder sb = new StringBuilder(); 
+		for (int i = 0; i < s.length(); i++) { 
+			char c = s.charAt(i); 
+			if (c == '\\' && i + 1 < s.length()) { 
+				char nxt = s.charAt(++i); 
+				switch (nxt) { 
+				case 'n': sb.append('\n'); break; 
+				case 't': sb.append('\t'); break; 
+				case 'b': sb.append('\b'); break; 
+				case 'f': sb.append('\f'); break; 
+				case 'r': sb.append('\r'); break; 
+				case '"': sb.append('"'); break; 
+				case '\\': sb.append('\\'); break; 
+				} 
+			} else { 
+				throw new LexicalException("Isso não deveria acontecer.");
+			} 
+		} 
+		return sb.toString(); 
+	}
 
 
   /**
@@ -684,11 +771,15 @@ public class Lexer {
             case YYINITIAL: {
               return Token.eof();
             }  // fall though
-            case 15: break;
+            case 27: break;
             case COMMENT: {
-              throw new Error("Comentário de bloco não terminado (EOF dentro de (* ... *))");
+              throw new UnterminatedCommentException("Comentário de bloco não terminado (EOF dentro de (* ... *))");
             }  // fall though
-            case 16: break;
+            case 28: break;
+            case STRING: {
+              throw new UnterminatedStringException("EOF dentro de string na linha " + (yyline+1));
+            }  // fall though
+            case 29: break;
             default:
         return null;
         }
@@ -699,42 +790,68 @@ public class Lexer {
             { commentBuffer.append(yytext());
             }
           // fall through
-          case 9: break;
+          case 17: break;
           case 2:
-            { throw new Error("Caractere inválido: " + yytext());
+            { throw new InvalidCharException("Caractere inválido: " + yytext());
             }
           // fall through
-          case 10: break;
+          case 18: break;
           case 3:
             { return new Token(TokenType.WHITESPACE, yytext());
             }
           // fall through
-          case 11: break;
+          case 19: break;
           case 4:
             { yyline++;
             }
           // fall through
-          case 12: break;
+          case 20: break;
           case 5:
+            { stringBuffer.setLength(0);
+	yybegin(STRING);
+            }
+          // fall through
+          case 21: break;
+          case 6:
+            { if (stringBuffer.length() + yytext().length() > STRING_MAX_LENGTH) {
+		throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
+	}
+	stringBuffer.append(yytext());
+            }
+          // fall through
+          case 22: break;
+          case 7:
+            { throw new UnterminatedStringException("String não terminada na linha " + (yyline+1));
+            }
+          // fall through
+          case 23: break;
+          case 8:
+            { String value = stringBuffer.toString();
+	yybegin(YYINITIAL);
+	return new Token(TokenType.STRING, value);
+            }
+          // fall through
+          case 24: break;
+          case 9:
             { commentDepth = 1;
 	commentBuffer.setLength(0);
 	commentBuffer.append(yytext());
 	yybegin(COMMENT);
             }
           // fall through
-          case 13: break;
-          case 6:
+          case 25: break;
+          case 10:
             { return new Token(TokenType.COMMENT, yytext());
             }
           // fall through
-          case 14: break;
-          case 7:
+          case 26: break;
+          case 11:
             { commentDepth++;
 	commentBuffer.append(yytext());
             }
           // fall through
-          case 15: break;
-          case 8:
+          case 27: break;
+          case 12:
             { commentDepth--;
 	commentBuffer.append(yytext());
 	if (commentDepth == 0) {
@@ -743,7 +860,35 @@ public class Lexer {
 	}
             }
           // fall through
-          case 16: break;
+          case 28: break;
+          case 13:
+            { if (stringBuffer.length() + 1 > STRING_MAX_LENGTH) {
+		throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
+	}
+	String t = yytext();
+	stringBuffer.append(t.charAt(1));
+            }
+          // fall through
+          case 29: break;
+          case 14:
+            { 
+            }
+          // fall through
+          case 30: break;
+          case 15:
+            { String t = unescape(yytext());
+	if (stringBuffer.length() + t.length() > STRING_MAX_LENGTH) {
+		throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
+	}
+	stringBuffer.append(t);
+            }
+          // fall through
+          case 31: break;
+          case 16:
+            { throw new NullCharInStringException("String contém \\0 na linha " + (yyline+1));
+            }
+          // fall through
+          case 32: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

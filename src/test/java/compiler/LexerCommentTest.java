@@ -1,6 +1,7 @@
 package compiler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.StringReader;
@@ -37,5 +38,17 @@ public class LexerCommentTest {
 
 		Lexer.Token token5 = lexer.yylex();
 		assertEquals(Lexer.TokenType.EOF, token5.type());
+	}
+	
+	@Test
+	void testUnterminatedComment() throws Exception {
+		String code = "(* Este comentário não termina ";
+		
+		Lexer lexer = new Lexer(new StringReader(code));
+		
+		assertThrows(
+				Lexer.UnterminatedCommentException.class,
+				() -> lexer.yylex()
+			);
 	}
 }

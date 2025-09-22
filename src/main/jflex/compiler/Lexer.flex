@@ -10,6 +10,15 @@ import java.util.HashMap;
 %public
 %type compiler.Lexer.Token
 %{
+	// CONSTANTS
+	private static final int STRING_MAX_LENGTH = 1024;
+	
+	// BUFFERS
+	private int commentDepth = 0;
+	private StringBuilder commentBuffer = new StringBuilder();
+	private StringBuilder stringBuffer = new StringBuilder();
+	
+	// TOKEN DEFINITION
 	public enum TokenType {
 		OBJECTID, TYPEID, INT, STRING, PLUS, MINUS, TIMES, 
 		DIVIDE, LT, LE, EQ, ASSIGN, ARROW, AT, DOT, COLON,
@@ -31,6 +40,7 @@ import java.util.HashMap;
 		}
 	}
 	
+	// KEYWORDS
 	private static final Map<String, TokenType> KEYWORDS = new HashMap<>();
 	static {
 		KEYWORDS.put("class", TokenType.CLASS);
@@ -54,17 +64,91 @@ import java.util.HashMap;
 		KEYWORDS.put("false", TokenType.FALSE);
 	}
 	
-	private int commentDepth = 0;
-	private StringBuilder commentBuffer = new StringBuilder();
+	// BASE EXCEPTIONS
+	public class LexicalException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public LexicalException(String message) {
+			super(message);
+		}
+	}
+	
+	// EXCEPTIONS
+	public class StringTooLongException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+		
+	    public StringTooLongException(String message) {
+	        super(message);
+	    }
+	}
+	
+	public class UnterminatedStringException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public UnterminatedStringException(String message) {
+	    	super(message);
+	    }
+	}
+
+	public class NullCharInStringException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public NullCharInStringException(String message) {
+	    	super(message);
+	    }
+	}
+
+	public class UnterminatedCommentException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public UnterminatedCommentException(String message) {
+	    	super(message);
+	    }
+	}
+
+	public class InvalidCharException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public InvalidCharException(String message) {
+	    	super(message);
+	    }
+	}
+	
+	// UTIL
+	private String unescape(String s) { 
+		StringBuilder sb = new StringBuilder(); 
+		for (int i = 0; i < s.length(); i++) { 
+			char c = s.charAt(i); 
+			if (c == '\\' && i + 1 < s.length()) { 
+				char nxt = s.charAt(++i); 
+				switch (nxt) { 
+				case 'n': sb.append('\n'); break; 
+				case 't': sb.append('\t'); break; 
+				case 'b': sb.append('\b'); break; 
+				case 'f': sb.append('\f'); break; 
+				case 'r': sb.append('\r'); break; 
+				case '"': sb.append('"'); break; 
+				case '\\': sb.append('\\'); break; 
+				} 
+			} else { 
+				throw new LexicalException("Isso não deveria acontecer.");
+			} 
+		} 
+		return sb.toString(); 
+	}
 %}
 
 // Para isolar lógica de comentários
 %state COMMENT
+// Para isolar lógica de strings
+%state STRING
 
 DIGIT = [0-9]
 LOWER = [a-z]
 UPPER = [A-Z]
 ID_CHAR = [A-Za-z0-9_]
+
+// Mantive \r para manter compatibilidade com Windows
+ESC_KNOWN = \\[ntbfr\"\\]
+ESC_NUL = \\0
+ESC_OTHER = \\[^\\\r\n0]
+LINE_CONT = \\(\r\n|\r|\n)
 
 %%
 
@@ -114,9 +198,57 @@ ID_CHAR = [A-Za-z0-9_]
 }
 
 <COMMENT> <<EOF>> {
-	throw new Error("Comentário de bloco não terminado (EOF dentro de (* ... *))");
+	throw new UnterminatedCommentException("Comentário de bloco não terminado (EOF dentro de (* ... *))");
+}
+
+<YYINITIAL> "\"" {
+	stringBuffer.setLength(0);
+	yybegin(STRING);
+}
+
+<STRING> {LINE_CONT} { }
+
+<STRING> {ESC_NUL} {
+	throw new NullCharInStringException("String contém \\0 na linha " + (yyline+1));
+}
+
+<STRING> {ESC_KNOWN} {
+	String t = unescape(yytext());
+	if (stringBuffer.length() + t.length() > STRING_MAX_LENGTH) {
+		throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
+	}
+	stringBuffer.append(t);
+}
+
+<STRING> {ESC_OTHER} {
+	if (stringBuffer.length() + 1 > STRING_MAX_LENGTH) {
+		throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
+	}
+	String t = yytext();
+	stringBuffer.append(t.charAt(1));
+}
+
+<STRING> [^\"\n\\\r]+ {
+	if (stringBuffer.length() + yytext().length() > STRING_MAX_LENGTH) {
+		throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
+	}
+	stringBuffer.append(yytext());
+}
+
+<STRING> "\"" {
+	String value = stringBuffer.toString();
+	yybegin(YYINITIAL);
+	return new Token(TokenType.STRING, value);
+}
+
+<STRING> (\r\n|\r|\n) {
+	throw new UnterminatedStringException("String não terminada na linha " + (yyline+1));
+}
+
+<STRING> <<EOF>> {
+	throw new UnterminatedStringException("EOF dentro de string na linha " + (yyline+1));
 }
 
 . {
-	throw new Error("Caractere inválido: " + yytext());
+	throw new InvalidCharException("Caractere inválido: " + yytext());
 }

@@ -1,0 +1,5 @@
+"Esta string não termina
+
+class Test {
+	
+}
