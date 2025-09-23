@@ -6,7 +6,6 @@ import java.util.HashMap;
 %%
 
 %class Lexer
-%unicode
 %public
 %type compiler.Lexer.Token
 %{
@@ -110,6 +109,13 @@ import java.util.HashMap;
 	    }
 	}
 	
+	public class IntegerOutOfRangeException extends LexicalException {
+		private static final long serialVersionUID = 1L;
+	    public IntegerOutOfRangeException(String message) {
+	    	super(message);
+	    }
+	}
+	
 	// UTIL
 	private String unescape(String s) { 
 		StringBuilder sb = new StringBuilder(); 
@@ -122,7 +128,6 @@ import java.util.HashMap;
 				case 't': sb.append('\t'); break; 
 				case 'b': sb.append('\b'); break; 
 				case 'f': sb.append('\f'); break; 
-				case 'r': sb.append('\r'); break; 
 				case '"': sb.append('"'); break; 
 				case '\\': sb.append('\\'); break; 
 				} 
@@ -131,6 +136,10 @@ import java.util.HashMap;
 			} 
 		} 
 		return sb.toString(); 
+	}
+	
+	public int getLine() {
+		return yyline + 1;
 	}
 %}
 
@@ -145,7 +154,7 @@ UPPER = [A-Z]
 ID_CHAR = [A-Za-z0-9_]
 
 // Mantive \r para manter compatibilidade com Windows
-ESC_KNOWN = \\[ntbfr\"\\]
+ESC_KNOWN = \\[ntbf\"\\]
 ESC_NUL = \\0
 ESC_OTHER = \\[^\\\r\n0]
 LINE_CONT = \\(\r\n|\r|\n)
@@ -156,15 +165,15 @@ LINE_CONT = \\(\r\n|\r|\n)
 	return Token.eof();
 }
 
-<YYINITIAL> [ \t\r]+ { 
+<YYINITIAL> [ \t]+ { 
 	return new Token(TokenType.WHITESPACE, yytext());
 }
 
-<YYINITIAL> \n {
+<YYINITIAL> (\r\n|\r|\n) {
 	yyline++;
 }
 
-<YYINITIAL> "--"[^\n]* { 
+<YYINITIAL> "--"[^\n\r]* { 
 	return new Token(TokenType.COMMENT, yytext());
 }
 
@@ -173,6 +182,11 @@ LINE_CONT = \\(\r\n|\r|\n)
 	commentBuffer.setLength(0);
 	commentBuffer.append(yytext());
 	yybegin(COMMENT);
+}
+
+<COMMENT> (\r\n|\r|\n) {
+    yyline++;
+    commentBuffer.append(yytext());
 }
 
 <COMMENT> "\(\*" {
@@ -189,7 +203,7 @@ LINE_CONT = \\(\r\n|\r|\n)
 	}
 }
 
-<COMMENT> [^\(\*]* { 
+<COMMENT> [^\(\*\r\n]+ { 
 	commentBuffer.append(yytext());
 }
 
@@ -206,7 +220,12 @@ LINE_CONT = \\(\r\n|\r|\n)
 	yybegin(STRING);
 }
 
-<STRING> {LINE_CONT} { }
+<STRING> {LINE_CONT} { 
+	String t = yytext();
+	for (int i = 0; i < t.length(); i++) {
+		if (t.charAt(i) == '\n') yyline++;
+	}
+}
 
 <STRING> {ESC_NUL} {
 	throw new NullCharInStringException("String contém \\0 na linha " + (yyline+1));
@@ -248,6 +267,49 @@ LINE_CONT = \\(\r\n|\r|\n)
 <STRING> <<EOF>> {
 	throw new UnterminatedStringException("EOF dentro de string na linha " + (yyline+1));
 }
+
+<YYINITIAL> {DIGIT}+ {
+	try {
+		Integer.parseInt(yytext());
+        return new Token(TokenType.INT, yytext());
+	} catch (NumberFormatException e) {
+    	throw new IntegerOutOfRangeException("Inteiro fora do intervalo 32 bits na linha " + (yyline + 1));
+	}
+}
+
+<YYINITIAL> {UPPER}{ID_CHAR}* { 
+	return new Token(TokenType.TYPEID, yytext()); 
+}
+
+<YYINITIAL> {LOWER}{ID_CHAR}* {
+	String t = yytext();
+	TokenType tt = KEYWORDS.get(t);
+	if (tt != null) {
+		return new Token(tt, t);
+	} else {
+		return new Token(TokenType.OBJECTID, t);
+	}
+}
+
+<YYINITIAL> "=>" { return new Token(TokenType.ARROW, yytext()); } 
+<YYINITIAL> "<=" { return new Token(TokenType.LE, yytext()); } 
+<YYINITIAL> "<-" { return new Token(TokenType.ASSIGN, yytext()); }
+
+<YYINITIAL> "<" { return new Token(TokenType.LT, yytext()); } 
+<YYINITIAL> "=" { return new Token(TokenType.EQ, yytext()); } 
+<YYINITIAL> "+" { return new Token(TokenType.PLUS, yytext()); } 
+<YYINITIAL> "-" { return new Token(TokenType.MINUS, yytext()); } 
+<YYINITIAL> "*" { return new Token(TokenType.TIMES, yytext()); } 
+<YYINITIAL> "/" { return new Token(TokenType.DIVIDE, yytext()); } 
+<YYINITIAL> "@" { return new Token(TokenType.AT, yytext()); } 
+<YYINITIAL> "." { return new Token(TokenType.DOT, yytext()); } 
+<YYINITIAL> ":" { return new Token(TokenType.COLON, yytext()); } 
+<YYINITIAL> ";" { return new Token(TokenType.SEMI, yytext()); } 
+<YYINITIAL> "," { return new Token(TokenType.COMMA, yytext()); } 
+<YYINITIAL> "\(" { return new Token(TokenType.LPAREN, yytext()); } 
+<YYINITIAL> "\)" { return new Token(TokenType.RPAREN, yytext()); } 
+<YYINITIAL> "\{" { return new Token(TokenType.LBRACE, yytext()); } 
+<YYINITIAL> "\}" { return new Token(TokenType.RBRACE, yytext()); }
 
 . {
 	throw new InvalidCharException("Caractere inválido: " + yytext());

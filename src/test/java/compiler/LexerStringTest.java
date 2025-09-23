@@ -21,7 +21,7 @@ public class LexerStringTest {
 		Lexer.Token token = lexer.yylex();
 		assertEquals(Lexer.TokenType.STRING, token.type());
 		
-		assertEquals("Isso está OK.\nTeste para tab\tfuncionou.\nTeste para barra invertida \\ funcionou.\nTeste para aspas \" funcionou.", token.value());
+		assertEquals("Isso esta OK.\nTeste para tab\tfuncionou.\nTeste para barra invertida \\ funcionou.\nTeste para aspas \" funcionou.", token.value());
 	}
 	
 	@Test
