@@ -910,24 +910,47 @@ public class Lexer {
           case 19:
             { String text = yytext();
     String lowerText = text.toLowerCase();
+
+    // 1. LÓGICA DE EXCEÇÃO: Trata 'true' e 'false' primeiro.
     if (lowerText.equals("true")) {
         if (Character.isLowerCase(text.charAt(0))) {
-            return new Token(TokenType.TRUE, text);
+            // Se começa com minúscula, normaliza para "true".
+            return new Token(TokenType.TRUE, "true");
+        } else {
+            // Se não, é um TYPEID e mantém o texto original.
+            return new Token(TokenType.TYPEID, text);
         }
     }
-    if (lowerText.equals("false")) {
+
+    else if (lowerText.equals("false")) {
         if (Character.isLowerCase(text.charAt(0))) {
-            return new Token(TokenType.FALSE, text);
+            // Se começa com minúscula, normaliza para "false".
+            return new Token(TokenType.FALSE, "false");
+        } else {
+            // Se não, é um TYPEID e mantém o texto original.
+            return new Token(TokenType.TYPEID, text);
         }
     }
-    TokenType keywordType = KEYWORDS.get(lowerText);
-    if (keywordType != null) {
-        return new Token(keywordType, text);
-    }
-    if (Character.isUpperCase(text.charAt(0))) {
-        return new Token(TokenType.TYPEID, text);
-    } else {
-        return new Token(TokenType.OBJECTID, text);
+
+    // 2. REGRA GERAL: Para todas as outras palavras.
+    else {
+        // Verifica se é outra palavra-chave (class, if, etc.)
+        TokenType keywordType = KEYWORDS.get(lowerText);
+        if (keywordType != null) {
+            // O valor é sempre a versão minúscula.
+            return new Token(keywordType, lowerText);
+        }
+
+        // Se não for, é um identificador.
+        else {
+            if (Character.isUpperCase(text.charAt(0))) {
+                // O valor é sempre a versão minúscula.
+                return new Token(TokenType.TYPEID, lowerText);
+            } else {
+                // O valor já é (ou se torna) minúsculo.
+                return new Token(TokenType.OBJECTID, lowerText);
+            }
+        }
     }
             }
           // fall through

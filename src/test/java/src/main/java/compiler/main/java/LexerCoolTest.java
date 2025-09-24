@@ -99,7 +99,7 @@ public class LexerCoolTest {
 		// Token 3: fALSE (FALSE)
 		Lexer.Token t3 = lexer.yylex();
 		assertEquals(Lexer.TokenType.FALSE, t3.type());
-		assertEquals("fALSE", t3.value());
+		assertEquals("false", t3.value());
 
 		// Token 4: ' ' (WHITESPACE)
 		Lexer.Token t4 = lexer.yylex();
@@ -121,7 +121,7 @@ public class LexerCoolTest {
 
 	@Test
 	void testKeywordCaseInsensitivity() throws Exception {
-		String code = "class IF\ntHeN";
+		String code = "Class IF\ntHeN";
 		Lexer lexer = new Lexer(new StringReader(code));
 
 		// Token 1: class (CLASS)
@@ -135,16 +135,14 @@ public class LexerCoolTest {
 		assertEquals(" ", t2.value());
 
 		// Token 3: IF (IF)
-		// A quebra de linha (\n) é processada pelo lexer aqui, mas não retorna um token.
-		// A próxima chamada a yylex() já retorna o token seguinte.
 		Lexer.Token t3 = lexer.yylex();
 		assertEquals(Lexer.TokenType.IF, t3.type());
-		assertEquals("IF", t3.value());
+		assertEquals("if", t3.value());
 
 		// Token 4: tHeN (THEN)
 		Lexer.Token t4 = lexer.yylex();
 		assertEquals(Lexer.TokenType.THEN, t4.type());
-		assertEquals("tHeN", t4.value());
+		assertEquals("then", t4.value());
 
 		// Token 5: EOF
 		Lexer.Token t5 = lexer.yylex();

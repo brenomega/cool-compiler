@@ -59,6 +59,8 @@ import java.util.HashMap;
 		KEYWORDS.put("new", TokenType.NEW);
 		KEYWORDS.put("of", TokenType.OF);
 		KEYWORDS.put("not", TokenType.NOT);
+		KEYWORDS.put("true", TokenType.TRUE);
+		KEYWORDS.put("false", TokenType.FALSE);
 	}
 	
 	// BASE EXCEPTIONS
@@ -280,22 +282,30 @@ LINE_CONT = \\(\r\n|\r|\n)
     String lowerText = text.toLowerCase();
     if (lowerText.equals("true")) {
         if (Character.isLowerCase(text.charAt(0))) {
-            return new Token(TokenType.TRUE, text);
+            return new Token(TokenType.TRUE, "true");
+        } else {
+            return new Token(TokenType.TYPEID, text);
         }
     }
-    if (lowerText.equals("false")) {
+    else if (lowerText.equals("false")) {
         if (Character.isLowerCase(text.charAt(0))) {
-            return new Token(TokenType.FALSE, text);
+            return new Token(TokenType.FALSE, "false");
+        } else {
+            return new Token(TokenType.TYPEID, text);
         }
     }
-    TokenType keywordType = KEYWORDS.get(lowerText);
-    if (keywordType != null) {
-        return new Token(keywordType, text);
-    }
-    if (Character.isUpperCase(text.charAt(0))) {
-        return new Token(TokenType.TYPEID, text);
-    } else {
-        return new Token(TokenType.OBJECTID, text);
+    else {
+        TokenType keywordType = KEYWORDS.get(lowerText);
+        if (keywordType != null) {
+            return new Token(keywordType, lowerText);
+        }
+        else {
+            if (Character.isUpperCase(text.charAt(0))) {
+                return new Token(TokenType.TYPEID, lowerText);
+            } else {
+                return new Token(TokenType.OBJECTID, lowerText);
+            }
+        }
     }
 }
 
