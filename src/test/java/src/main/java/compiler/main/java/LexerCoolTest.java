@@ -187,4 +187,23 @@ public class LexerCoolTest {
 		Lexer.Token eof = lexer.yylex();
 		assertEquals(Lexer.TokenType.EOF, eof.type(), "EOF esperado ao final");
 	}
+
+	@Test
+	void testNegationOperator() throws Exception {
+		String code = "~42";
+		Lexer lexer = new Lexer(new StringReader(code));
+
+		Lexer.Token t1 = lexer.yylex();
+		assertEquals(Lexer.TokenType.NEG, t1.type(), "O primeiro token deve ser do tipo NEG");
+		assertEquals("~", t1.value(), "O valor do token NEG deve ser '~'");
+
+		Lexer.Token t2 = lexer.yylex();
+		assertEquals(Lexer.TokenType.INT, t2.type(), "O segundo token deve ser do tipo INT");
+		assertEquals("42", t2.value(), "O valor do token INT deve ser '42'");
+
+		Lexer.Token t3 = lexer.yylex();
+		assertEquals(Lexer.TokenType.EOF, t3.type(), "O último token deve ser EOF");
+
+		assertCurrentLine(0, lexer);
+	}
 }
