@@ -21,7 +21,7 @@ import java.util.HashMap;
 	public enum TokenType {
 		OBJECTID, TYPEID, INT, STRING, PLUS, MINUS, TIMES, 
 		DIVIDE, LT, LE, EQ, ASSIGN, ARROW, AT, DOT, COLON,
-		SEMI, COMMA, LPAREN, RPAREN, LBRACE, RBRACE, 
+		SEMI, COMMA, LPAREN, RPAREN, LBRACE, RBRACE, NEG,
 		
 		CLASS, ELSE, FI, IF, IN, INHERITS, ISVOID, LET, LOOP, 
 		POOL, THEN, WHILE, CASE, ESAC, NEW, OF, NOT, TRUE, FALSE,
@@ -59,8 +59,6 @@ import java.util.HashMap;
 		KEYWORDS.put("new", TokenType.NEW);
 		KEYWORDS.put("of", TokenType.OF);
 		KEYWORDS.put("not", TokenType.NOT);
-		KEYWORDS.put("true", TokenType.TRUE);
-		KEYWORDS.put("false", TokenType.FALSE);
 	}
 	
 	// BASE EXCEPTIONS
@@ -277,18 +275,28 @@ LINE_CONT = \\(\r\n|\r|\n)
 	}
 }
 
-<YYINITIAL> {UPPER}{ID_CHAR}* { 
-	return new Token(TokenType.TYPEID, yytext()); 
-}
-
-<YYINITIAL> {LOWER}{ID_CHAR}* {
-	String t = yytext();
-	TokenType tt = KEYWORDS.get(t);
-	if (tt != null) {
-		return new Token(tt, t);
-	} else {
-		return new Token(TokenType.OBJECTID, t);
-	}
+<YYINITIAL> [a-zA-Z][a-zA-Z0-9_]* {
+    String text = yytext();
+    String lowerText = text.toLowerCase();
+    if (lowerText.equals("true")) {
+        if (Character.isLowerCase(text.charAt(0))) {
+            return new Token(TokenType.TRUE, text);
+        }
+    }
+    if (lowerText.equals("false")) {
+        if (Character.isLowerCase(text.charAt(0))) {
+            return new Token(TokenType.FALSE, text);
+        }
+    }
+    TokenType keywordType = KEYWORDS.get(lowerText);
+    if (keywordType != null) {
+        return new Token(keywordType, text);
+    }
+    if (Character.isUpperCase(text.charAt(0))) {
+        return new Token(TokenType.TYPEID, text);
+    } else {
+        return new Token(TokenType.OBJECTID, text);
+    }
 }
 
 <YYINITIAL> "=>" { return new Token(TokenType.ARROW, yytext()); } 
@@ -298,7 +306,8 @@ LINE_CONT = \\(\r\n|\r|\n)
 <YYINITIAL> "<" { return new Token(TokenType.LT, yytext()); } 
 <YYINITIAL> "=" { return new Token(TokenType.EQ, yytext()); } 
 <YYINITIAL> "+" { return new Token(TokenType.PLUS, yytext()); } 
-<YYINITIAL> "-" { return new Token(TokenType.MINUS, yytext()); } 
+<YYINITIAL> "-" { return new Token(TokenType.MINUS, yytext()); }
+<YYINITIAL> "~" { return new Token(TokenType.NEG, yytext()); }
 <YYINITIAL> "*" { return new Token(TokenType.TIMES, yytext()); } 
 <YYINITIAL> "/" { return new Token(TokenType.DIVIDE, yytext()); } 
 <YYINITIAL> "@" { return new Token(TokenType.AT, yytext()); } 

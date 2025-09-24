@@ -1,7 +1,7 @@
 -- simple line comment
 (* simple block comment *)
 
-class Main inherits IO {
+cLasS Main inherits IO {
     x : Int <- 10;  -- simple assign
     y : String <- "Hello, COOL!\nNew line";
 

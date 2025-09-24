@@ -1,11 +1,13 @@
-package compiler;
+package src.main.java.compiler.main.java;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.StringReader;
+import java.lang.reflect.Field;
 
+import compiler.Lexer;
 import org.junit.jupiter.api.Test;
 
 public class LexerCommentTest {
@@ -48,7 +50,7 @@ public class LexerCommentTest {
 			throw new RuntimeException("Não foi possível acessar yyline no Lexer via reflection", e);
 		}
 	}
-	
+
 	@Test
 	void testUnterminatedComment() throws Exception {
 		String code = "(* Este comentario não termina ";
@@ -59,5 +61,17 @@ public class LexerCommentTest {
 				Lexer.UnterminatedCommentException.class,
 				() -> lexer.yylex()
 			);
+	}
+
+	@Test
+	void testUnterminatedStringAtNewline() {
+		String code = "\"uma string\n com erro";
+		Lexer lexer = new Lexer(new StringReader(code));
+
+		// A exceção deve ser lançada na primeira chamada a yylex()
+		assertThrows(
+				Lexer.UnterminatedStringException.class,
+				() -> lexer.yylex()
+		);
 	}
 }

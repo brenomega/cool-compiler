@@ -1,4 +1,4 @@
-package compiler;
+package src.main.java.compiler.main.java;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import compiler.Lexer;
 import org.junit.jupiter.api.Test;
 
 public class LexerStringTest {

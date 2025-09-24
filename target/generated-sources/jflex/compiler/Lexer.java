@@ -70,9 +70,9 @@ public class Lexer {
     "\1\5\5\0\1\6\1\7\1\10\1\11\1\12\1\13"+
     "\1\14\1\15\1\16\11\17\1\20\1\21\1\22\1\23"+
     "\1\24\1\0\1\25\32\26\1\0\1\27\2\0\1\30"+
-    "\1\0\1\31\1\32\3\31\1\32\7\31\1\32\5\31"+
-    "\1\32\6\31\1\33\1\0\1\34\7\0\1\3\u01a2\0"+
-    "\2\3\326\0\u0100\3";
+    "\1\0\1\26\1\31\3\26\1\31\7\26\1\31\5\26"+
+    "\1\31\6\26\1\32\1\0\1\33\1\34\6\0\1\3"+
+    "\u01a2\0\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -134,10 +134,10 @@ public class Lexer {
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\35\0\72\0\127\0\164\0\127\0\221\0\127"+
     "\0\256\0\127\0\127\0\127\0\127\0\313\0\127\0\127"+
-    "\0\350\0\127\0\127\0\u0105\0\u0122\0\127\0\u013f\0\u015c"+
-    "\0\127\0\127\0\u0179\0\127\0\u0196\0\u01b3\0\u01d0\0\u01ed"+
-    "\0\127\0\u020a\0\127\0\u0227\0\127\0\u0244\0\127\0\127"+
-    "\0\127\0\127\0\127\0\127\0\127\0\u0261\0\127\0\127";
+    "\0\350\0\127\0\127\0\u0105\0\u0122\0\127\0\u013f\0\127"+
+    "\0\127\0\127\0\u015c\0\127\0\u0179\0\u0196\0\u01b3\0\u01d0"+
+    "\0\127\0\u01ed\0\127\0\u020a\0\127\0\u0227\0\127\0\127"+
+    "\0\127\0\127\0\127\0\127\0\127\0\u0244\0\127\0\127";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[48];
@@ -165,22 +165,22 @@ public class Lexer {
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\4\1\5\1\6\1\0\1\7\1\10\1\11\1\12"+
     "\1\13\1\14\1\15\1\16\1\17\1\20\2\21\1\22"+
-    "\1\23\1\24\1\25\1\4\1\26\1\27\2\4\2\30"+
-    "\1\31\1\32\2\33\1\34\1\33\1\35\1\33\1\36"+
-    "\1\33\1\37\24\33\2\40\1\41\1\40\1\42\1\43"+
-    "\21\40\1\44\5\40\36\0\1\5\35\0\1\6\42\0"+
-    "\1\45\37\0\1\46\37\0\2\21\30\0\1\47\7\0"+
-    "\1\50\35\0\1\51\26\0\2\27\6\0\1\27\1\0"+
-    "\3\27\20\0\2\30\6\0\1\30\1\0\3\30\2\0"+
-    "\2\33\1\0\1\33\1\0\1\33\1\0\1\33\1\0"+
-    "\24\33\2\0\1\34\42\0\1\52\33\0\1\53\25\0"+
-    "\2\40\1\0\1\40\2\0\21\40\1\0\5\40\2\0"+
-    "\1\41\32\0\2\54\1\55\1\54\1\56\1\57\10\54"+
-    "\1\60\10\54\1\57\2\54\1\57\2\54\2\46\1\0"+
-    "\1\46\1\0\30\46\2\0\1\55\32\0";
+    "\1\23\1\24\1\25\1\4\1\26\1\27\2\4\1\27"+
+    "\1\30\1\31\1\32\2\33\1\34\1\33\1\35\1\33"+
+    "\1\36\1\33\1\37\24\33\2\40\1\41\1\40\1\42"+
+    "\1\43\21\40\1\44\5\40\36\0\1\5\35\0\1\6"+
+    "\42\0\1\45\37\0\1\46\37\0\2\21\30\0\1\47"+
+    "\7\0\1\50\35\0\1\51\26\0\2\27\6\0\1\27"+
+    "\1\0\2\27\3\0\2\33\1\0\1\33\1\0\1\33"+
+    "\1\0\1\33\1\0\24\33\2\0\1\34\42\0\1\52"+
+    "\33\0\1\53\25\0\2\40\1\0\1\40\2\0\21\40"+
+    "\1\0\5\40\2\0\1\41\32\0\2\54\1\55\1\54"+
+    "\1\56\1\57\10\54\1\60\10\54\1\57\1\54\1\57"+
+    "\3\54\2\46\1\0\1\46\1\0\30\46\2\0\1\55"+
+    "\32\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[638];
+    int [] result = new int[609];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -224,7 +224,7 @@ public class Lexer {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\3\0\1\11\1\1\1\11\1\1\1\11\1\1\4\11"+
-    "\1\1\2\11\1\1\2\11\2\1\1\11\2\1\2\11"+
+    "\1\1\2\11\1\1\2\11\2\1\1\11\1\1\3\11"+
     "\1\1\1\11\4\1\1\11\1\1\1\11\1\1\1\11"+
     "\1\1\7\11\1\1\2\11";
 
@@ -321,7 +321,7 @@ public class Lexer {
 	public enum TokenType {
 		OBJECTID, TYPEID, INT, STRING, PLUS, MINUS, TIMES, 
 		DIVIDE, LT, LE, EQ, ASSIGN, ARROW, AT, DOT, COLON,
-		SEMI, COMMA, LPAREN, RPAREN, LBRACE, RBRACE, 
+		SEMI, COMMA, LPAREN, RPAREN, LBRACE, RBRACE, NEG,
 		
 		CLASS, ELSE, FI, IF, IN, INHERITS, ISVOID, LET, LOOP, 
 		POOL, THEN, WHILE, CASE, ESAC, NEW, OF, NOT, TRUE, FALSE,
@@ -359,8 +359,6 @@ public class Lexer {
 		KEYWORDS.put("new", TokenType.NEW);
 		KEYWORDS.put("of", TokenType.OF);
 		KEYWORDS.put("not", TokenType.NOT);
-		KEYWORDS.put("true", TokenType.TRUE);
-		KEYWORDS.put("false", TokenType.FALSE);
 	}
 	
 	// BASE EXCEPTIONS
@@ -908,28 +906,42 @@ public class Lexer {
           // fall through
           case 56: break;
           case 19:
-            { return new Token(TokenType.TYPEID, yytext());
+            { String text = yytext();
+    String lowerText = text.toLowerCase();
+    if (lowerText.equals("true")) {
+        if (Character.isLowerCase(text.charAt(0))) {
+            return new Token(TokenType.TRUE, text);
+        }
+    }
+    if (lowerText.equals("false")) {
+        if (Character.isLowerCase(text.charAt(0))) {
+            return new Token(TokenType.FALSE, text);
+        }
+    }
+    TokenType keywordType = KEYWORDS.get(lowerText);
+    if (keywordType != null) {
+        return new Token(keywordType, text);
+    }
+    if (Character.isUpperCase(text.charAt(0))) {
+        return new Token(TokenType.TYPEID, text);
+    } else {
+        return new Token(TokenType.OBJECTID, text);
+    }
             }
           // fall through
           case 57: break;
           case 20:
-            { String t = yytext();
-	TokenType tt = KEYWORDS.get(t);
-	if (tt != null) {
-		return new Token(tt, t);
-	} else {
-		return new Token(TokenType.OBJECTID, t);
-	}
+            { return new Token(TokenType.LBRACE, yytext());
             }
           // fall through
           case 58: break;
           case 21:
-            { return new Token(TokenType.LBRACE, yytext());
+            { return new Token(TokenType.RBRACE, yytext());
             }
           // fall through
           case 59: break;
           case 22:
-            { return new Token(TokenType.RBRACE, yytext());
+            { return new Token(TokenType.NEG, yytext());
             }
           // fall through
           case 60: break;
