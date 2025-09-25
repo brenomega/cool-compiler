@@ -1,4 +1,4 @@
-package src.main.java.compiler.main.java;
+package lexer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

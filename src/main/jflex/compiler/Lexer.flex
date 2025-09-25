@@ -89,7 +89,7 @@ import java.util.HashMap;
 	}
 
 	public class NullCharInStringException extends LexicalException {
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 	    public NullCharInStringException(String message) {
 	    	super(message);
 	    }
@@ -280,33 +280,20 @@ LINE_CONT = \\(\r\n|\r|\n)
 <YYINITIAL> [a-zA-Z][a-zA-Z0-9_]* {
     String text = yytext();
     String lowerText = text.toLowerCase();
-    if (lowerText.equals("true")) {
+    TokenType keywordType = KEYWORDS.get(lowerText);
+    if (keywordType == TokenType.FALSE || keywordType == TokenType.TRUE) {
         if (Character.isLowerCase(text.charAt(0))) {
-            return new Token(TokenType.TRUE, "true");
-        } else {
-            return new Token(TokenType.TYPEID, text);
+            return new Token(keywordType, yytext());
         }
+        return new Token(TokenType.TYPEID, yytext());
     }
-    else if (lowerText.equals("false")) {
-        if (Character.isLowerCase(text.charAt(0))) {
-            return new Token(TokenType.FALSE, "false");
-        } else {
-            return new Token(TokenType.TYPEID, text);
-        }
+    if (keywordType != null) {
+        return new Token(keywordType, yytext());
     }
-    else {
-        TokenType keywordType = KEYWORDS.get(lowerText);
-        if (keywordType != null) {
-            return new Token(keywordType, lowerText);
-        }
-        else {
-            if (Character.isUpperCase(text.charAt(0))) {
-                return new Token(TokenType.TYPEID, lowerText);
-            } else {
-                return new Token(TokenType.OBJECTID, lowerText);
-            }
-        }
+    if (Character.isUpperCase(text.charAt(0))) {
+        return new Token(TokenType.TYPEID, yytext());
     }
+    return new Token(TokenType.OBJECTID, yytext());
 }
 
 <YYINITIAL> "=>" { return new Token(TokenType.ARROW, yytext()); } 

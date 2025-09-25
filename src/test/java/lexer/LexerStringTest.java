@@ -1,4 +1,4 @@
-package src.main.java.compiler.main.java;
+package lexer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,7 +15,7 @@ public class LexerStringTest {
 
 	@Test
 	void testStrings() throws Exception {
-		String code = Files.readString(Paths.get("src/test/resources/strings/test1.txt"));
+		String code = Files.readString(Paths.get("src/test/resources/strings/test1.cl"));
 		
 		Lexer lexer = new Lexer(new StringReader(code));
 		

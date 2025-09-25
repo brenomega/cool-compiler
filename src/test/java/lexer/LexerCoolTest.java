@@ -1,4 +1,4 @@
-package src.main.java.compiler.main.java;
+package lexer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -154,10 +154,10 @@ public class LexerCoolTest {
 
 	@Test
 	void testLexerAgainstOutputFile() throws Exception {
-		String code = Files.readString(Paths.get("src/test/resources/cool/test1.txt"));
+		String code = Files.readString(Paths.get("src/test/resources/cool/test1.cl"));
 		Lexer lexer = new Lexer(new StringReader(code));
 
-		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/cool/test1_output.txt"));
+		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/cool/test1_expected.txt"));
 		List<Expected> expectedTokens = new ArrayList<>();
 
 		Pattern pattern = Pattern.compile("Line (\\d+): (\\w+)\\('.*'\\)");
