@@ -1,5 +1,0 @@
-"Esta string nao termina
-
-class Test {
-	
-}
