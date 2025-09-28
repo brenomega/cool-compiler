@@ -20,8 +20,20 @@ public class LexerDriver {
         Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
         try {
             while (true) {
+                boolean ignorar_wp;
                 System.out.print("Digite o número do teste (1 a 7) ou 'e' para sair: ");
                 String input = scanner.nextLine().trim();
+
+                System.out.println("Deseja ignorar os tokens WHITESPACE? (S/N)");
+                String input_wp = scanner.nextLine().trim();
+                if (input_wp.equalsIgnoreCase("S")) {
+                    ignorar_wp = true;
+                }else if (input_wp.equalsIgnoreCase("N")) {
+                    ignorar_wp = false;
+                }else{
+                    ignorar_wp = false;
+                    System.out.println("Opção inválida, ignorando WHISTESPACE por padrão.");
+                }
 
                 if (input.equalsIgnoreCase("e")) {
                     System.out.println("Saindo.");
@@ -77,6 +89,10 @@ public class LexerDriver {
                             writer.flush();
                             System.out.println("Arquivo de saída criado: " + outputPath);
                             break;
+                        }
+
+                        if (ignorar_wp && token.type() == TokenType.WHITESPACE) {
+                            continue;
                         }
 
                         String outLine = String.format("Line %d: %s", lexer.getLine(), token.toString());
