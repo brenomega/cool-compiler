@@ -165,7 +165,11 @@ LINE_CONT = \\(\r\n|\r|\n)
 	return Token.eof();
 }
 
-<YYINITIAL> [ \t]+ { 
+<YYINITIAL> [ \n\f\r\t\v]+ {
+
+    for (int i = 0; i < yylength(); i++) {
+        if (yycharat(i) == '\n') yyline++;
+    }
 	return new Token(TokenType.WHITESPACE, yytext());
 }
 
