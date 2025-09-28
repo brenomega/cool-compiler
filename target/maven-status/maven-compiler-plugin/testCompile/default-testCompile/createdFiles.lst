@@ -1,0 +1,5 @@
+lexer\LexerCoolTest.class
+lexer\LexerCoolTest$Expected.class
+lexer\LexerCommentTest.class
+lexer\LexerStringTest.class
+lexer\tools\LexerDriver.class

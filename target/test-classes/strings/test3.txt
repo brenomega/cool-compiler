@@ -1,0 +1,1 @@
+"Esta string contem null\0"
