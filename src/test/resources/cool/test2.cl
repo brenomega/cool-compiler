@@ -10,7 +10,7 @@ class Main inherits IO {
     media    : Int;
 
     main() : Object {
-        -- Entrada do usuário
+        -- Entrada do usuario
         out_string("Digite seu nome: ");
         nome <- in_string();
 
@@ -20,7 +20,7 @@ class Main inherits IO {
         out_string("Digite o segundo inteiro: ");
         segundo <- in_int();
 
-        -- Média por divisão inteira
+        -- Média por divisao inteira
         media <- (primeiro + segundo) / 2;
 
         out_string("A media é: ");
@@ -28,8 +28,8 @@ class Main inherits IO {
         out_string("\n");
 
         (*
-          Incrementando a média 10 vezes.
-          Declarando variável local para o while com let
+          Incrementando a media 10 vezes.
+          Declarando variavel local para o while com let
         *)
         let i : Int <- 0 in
           while i < 10 loop
@@ -39,15 +39,15 @@ class Main inherits IO {
           pool
         ;
 
-        -- Em cool não existe '>', testamos 15 < media
+        -- Em cool nao existe '>', testamos 15 < media
         if 15 < media then
-          out_string("A media final é maior que 15.\n")
+          out_string("A media final eh maior que 15.\n")
         else
-          out_string("A media final não é maior que 15.\n")
+          out_string("A media final nao eh maior que 15.\n")
         fi;
 
         out_string(nome);
-        out_string(", a media incrementada é: ");
+        out_string(", a media incrementada eh: ");
         out_int(media);
         out_string("\n");
 

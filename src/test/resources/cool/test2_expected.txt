@@ -60,7 +60,7 @@ Line 12: WHITESPACE(' ')
 Line 12: LBRACE('{')
 Line 13: WHITESPACE('
         ')
-Line 13: COMMENT('-- Entrada do usuário')
+Line 13: COMMENT('-- Entrada do usuario')
 Line 14: WHITESPACE('
         ')
 Line 14: OBJECTID('out_string')
@@ -117,7 +117,7 @@ Line 21: SEMI(';')
 Line 23: WHITESPACE('
 
         ')
-Line 23: COMMENT('-- Média por divisão inteira')
+Line 23: COMMENT('-- Média por divisao inteira')
 Line 24: WHITESPACE('
         ')
 Line 24: OBJECTID('media')
@@ -163,8 +163,8 @@ Line 30: WHITESPACE('
 
         ')
 Line 33: COMMENT('(*
-          Incrementando a média 10 vezes.
-          Declarando variável local para o while com let
+          Incrementando a media 10 vezes.
+          Declarando variavel local para o while com let
         *)')
 Line 34: WHITESPACE('
         ')
@@ -232,7 +232,7 @@ Line 40: SEMI(';')
 Line 42: WHITESPACE('
 
         ')
-Line 42: COMMENT('-- Em cool não existe '>', testamos 15 < media')
+Line 42: COMMENT('-- Em cool nao existe '>', testamos 15 < media')
 Line 43: WHITESPACE('
         ')
 Line 43: IF('if')
@@ -248,7 +248,7 @@ Line 44: WHITESPACE('
           ')
 Line 44: OBJECTID('out_string')
 Line 44: LPAREN('(')
-Line 44: STRING('A media final é maior que 15.
+Line 44: STRING('A media final eh maior que 15.
 ')
 Line 44: RPAREN(')')
 Line 45: WHITESPACE('
@@ -258,7 +258,7 @@ Line 46: WHITESPACE('
           ')
 Line 46: OBJECTID('out_string')
 Line 46: LPAREN('(')
-Line 46: STRING('A media final não é maior que 15.
+Line 46: STRING('A media final nao eh maior que 15.
 ')
 Line 46: RPAREN(')')
 Line 47: WHITESPACE('
@@ -277,7 +277,7 @@ Line 50: WHITESPACE('
         ')
 Line 50: OBJECTID('out_string')
 Line 50: LPAREN('(')
-Line 50: STRING(', a media incrementada é: ')
+Line 50: STRING(', a media incrementada eh: ')
 Line 50: RPAREN(')')
 Line 50: SEMI(';')
 Line 51: WHITESPACE('

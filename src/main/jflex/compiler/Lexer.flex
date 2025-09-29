@@ -177,7 +177,7 @@ LINE_CONT = \\(\r\n|\r|\n)
 	yyline++;
 }
 
-<YYINITIAL> "--"[^\n\r]* { 
+<YYINITIAL> "--"[^\n\r]* {
 	return new Token(TokenType.COMMENT, yytext());
 }
 
@@ -207,11 +207,11 @@ LINE_CONT = \\(\r\n|\r|\n)
 	}
 }
 
-<COMMENT> [^\(\*\r\n]+ { 
+<COMMENT> [^\(\*\r\n]+ {
 	commentBuffer.append(yytext());
 }
 
-<COMMENT> . { 
+<COMMENT> . {
 	commentBuffer.append(yytext());
 }
 

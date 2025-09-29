@@ -135,7 +135,7 @@ Line 21: OBJECTID('p1')
 Line 21: DOT('.')
 Line 21: OBJECTID('set_nome')
 Line 21: LPAREN('(')
-Line 21: STRING('André')
+Line 21: STRING('Andre')
 Line 21: RPAREN(')')
 Line 21: SEMI(';')
 Line 22: WHITESPACE('
@@ -170,7 +170,7 @@ Line 26: WHITESPACE('
         ')
 Line 26: OBJECTID('out_string')
 Line 26: LPAREN('(')
-Line 26: STRING(' é amigo de ')
+Line 26: STRING(' eh amigo de ')
 Line 26: RPAREN(')')
 Line 26: SEMI(';')
 Line 27: WHITESPACE('

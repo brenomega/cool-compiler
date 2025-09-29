@@ -18,12 +18,12 @@ class Main inherits IO {
 
     main() : Object {
         (* Inicializando os nomes*)
-        p1 <- p1.set_nome("André");
+        p1 <- p1.set_nome("Andre");
         p2 <- p2.set_nome("Carlos");
 
         (* Escrevendo os nomes *)
         out_string(p1.get_nome());
-        out_string(" é amigo de ");
+        out_string(" eh amigo de ");
         out_string(p2.get_nome());
         out_string("\n");
 
