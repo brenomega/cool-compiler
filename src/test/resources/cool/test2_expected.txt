@@ -117,7 +117,7 @@ Line 21: SEMI(';')
 Line 23: WHITESPACE('
 
         ')
-Line 23: COMMENT('-- Média por divisao inteira')
+Line 23: COMMENT('-- Media por divisao inteira')
 Line 24: WHITESPACE('
         ')
 Line 24: OBJECTID('media')
@@ -141,7 +141,7 @@ Line 26: WHITESPACE('
         ')
 Line 26: OBJECTID('out_string')
 Line 26: LPAREN('(')
-Line 26: STRING('A media é: ')
+Line 26: STRING('A media eh: ')
 Line 26: RPAREN(')')
 Line 26: SEMI(';')
 Line 27: WHITESPACE('

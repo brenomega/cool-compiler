@@ -1,7 +1,7 @@
 -- Arquivo 6, erro de comentario aninhado inserido
 
-(* Este é o início de um comentario
-    (* este é o aninhamento de um comentario
+(* Este e o inicio de um comentario
+    (* este eh o aninhamento de um comentario
    Aqui falta o fechamento do comentario aninhado
 *)
 

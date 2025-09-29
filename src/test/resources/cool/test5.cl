@@ -23,10 +23,10 @@ class Main inherits IO {
         out_string("Digite o segundo inteiro: ");
         segundo <- in_int();
 
-        -- Média por divisao inteira
+        -- Media por divisao inteira
         media <- (primeiro + segundo) / 2;
 
-        out_string("A media é: ");
+        out_string("A media eh: ");
         out_int(media);
         out_string("\n");
 
