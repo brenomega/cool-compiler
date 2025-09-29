@@ -8,6 +8,7 @@ import java.util.HashMap;
 %class Lexer
 %public
 %type compiler.Lexer.Token
+%7bit
 %{
 	// CONSTANTS
 	private static final int STRING_MAX_LENGTH = 1024;
@@ -115,6 +116,8 @@ import java.util.HashMap;
 	    	super(message);
 	    }
 	}
+
+    }
 	
 	// UTIL
 	private String unescape(String s) { 

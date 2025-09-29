@@ -89,6 +89,19 @@ public class LexerDriver {
                             writer.flush();
                             System.out.println("Arquivo de saída criado: " + outputPath);
                             break;
+                        } catch (ArrayIndexOutOfBoundsException ex){
+                            int line = lexer.getLine();
+                            String msg = String.format(
+                                    "%s: NonAsciiChar - caractere fora do ASCII (0-127) detectado na linha %d.",
+                                    ex.getClass().getSimpleName(),
+                                    line
+                            );
+                            System.out.println(msg);
+                            writer.write(msg);
+                            writer.newLine();
+                            writer.flush();
+                            System.out.println("Arquivo de saída criado: " + outputPath);
+                            break;
                         }
 
                         if (ignorar_wp && token.type() == TokenType.WHITESPACE) {
