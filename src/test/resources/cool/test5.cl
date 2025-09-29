@@ -1,5 +1,8 @@
 (*
-Arquivo Teste 2
+Arquivo Teste 2 com erro
+    (*
+        caractere inválido
+    *)
 *)
 
 class Main inherits IO {
@@ -39,8 +42,8 @@ class Main inherits IO {
           pool
         ;
 
-        -- Em cool não existe '>', testamos 15 < media
-        if 15 < media then
+        -- Erro léxico inserido, caracter ">" não é reconhecido
+        if media > 15 then
           out_string("A media final é maior que 15.\n")
         else
           out_string("A media final não é maior que 15.\n")
