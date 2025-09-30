@@ -5,4 +5,7 @@
 .project
 .classpath
 .settings/
+<<<<<<< Updated upstream
 target/
+=======
+>>>>>>> Stashed changes

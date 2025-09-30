@@ -14,10 +14,10 @@ public class LexerCommentTest {
 
 	@Test
 	void testCommentsAndWhitespace() throws Exception {
-		String code = "" 
-						+ "-- comentario de linha\n" 
+		String code = ""
+						+ "-- comentario de linha\n"
 						+ "(* comentario de bloco *)\n"
-						+ "(* comentario \n aninhado (* interno *) final *)\n" 
+						+ "(* comentario \n aninhado (* interno *) final *)\n"
 						+ "   \t  \n";
 
 		Lexer lexer = new Lexer(new StringReader(code));
@@ -26,9 +26,17 @@ public class LexerCommentTest {
 		assertEquals(Lexer.TokenType.COMMENT, token1.type());
 		assertEquals("-- comentario de linha", token1.value());
 
+		Lexer.Token token11 = lexer.yylex();
+		assertEquals(Lexer.TokenType.WHITESPACE, token11.type());
+		assertEquals("\n", token11.value());
+
 		Lexer.Token token2 = lexer.yylex();
 		assertEquals(Lexer.TokenType.COMMENT, token2.type());
 		assertEquals("(* comentario de bloco *)", token2.value());
+
+		Lexer.Token token22 = lexer.yylex();
+		assertEquals(Lexer.TokenType.WHITESPACE, token22.type());
+		assertEquals("\n", token11.value());
 
 		Lexer.Token token3 = lexer.yylex();
 		assertEquals(Lexer.TokenType.COMMENT, token3.type());
@@ -53,7 +61,7 @@ public class LexerCommentTest {
 
 	@Test
 	void testUnterminatedComment() throws Exception {
-		String code = "(* Este comentario não termina ";
+		String code = "(* Este comentario nao termina ";
 		
 		Lexer lexer = new Lexer(new StringReader(code));
 		

@@ -1,0 +1,20 @@
+-------------------------------------------------------------------------------
+Test set: lexer.LexerStringTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.041 s <<< FAILURE! -- in lexer.LexerStringTest
+lexer.LexerStringTest.testStrings -- Time elapsed: 0.004 s <<< ERROR!
+java.nio.file.NoSuchFileException: src\test\resources\strings\test1.cl
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:234)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:379)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:431)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:3268)
+	at java.base/java.nio.file.Files.readString(Files.java:3346)
+	at java.base/java.nio.file.Files.readString(Files.java:3305)
+	at lexer.LexerStringTest.testStrings(LexerStringTest.java:18)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

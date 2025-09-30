@@ -176,9 +176,6 @@ LINE_CONT = \\(\r\n|\r|\n)
 	return new Token(TokenType.WHITESPACE, yytext());
 }
 
-<YYINITIAL> (\r\n|\r|\n) {
-	yyline++;
-}
 
 <YYINITIAL> "--"[^\n\r]* {
 	return new Token(TokenType.COMMENT, yytext());

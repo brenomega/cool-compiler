@@ -1,3 +1,7 @@
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 package lexer.tools;
 
 import compiler.Lexer.*;
@@ -92,8 +96,12 @@ public class LexerDriver {
                         } catch (ArrayIndexOutOfBoundsException ex){
                             int line = lexer.getLine();
                             String msg = String.format(
+<<<<<<< Updated upstream
                                     "%s: NonAsciiChar - caractere fora do ASCII (0-127) detectado na linha %d.",
                                     ex.getClass().getSimpleName(),
+=======
+                                    "NonAsciiChar - caractere fora do ASCII (0-127) detectado na linha %d.",
+>>>>>>> Stashed changes
                                     line
                             );
                             System.out.println(msg);
@@ -131,4 +139,8 @@ public class LexerDriver {
             scanner.close();
         }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
