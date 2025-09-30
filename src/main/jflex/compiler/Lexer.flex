@@ -116,8 +116,6 @@ import java.util.HashMap;
 	    	super(message);
 	    }
 	}
-
-    }
 	
 	// UTIL
 	private String unescape(String s) { 

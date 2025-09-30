@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: lexer.LexerCoolTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.076 s <<< FAILURE! -- in lexer.LexerCoolTest
-lexer.LexerCoolTest.testTrueFalseSpecialHandling -- Time elapsed: 0.022 s <<< FAILURE!
+Tests run: 5, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.099 s <<< FAILURE! -- in lexer.LexerCoolTest
+lexer.LexerCoolTest.testTrueFalseSpecialHandling -- Time elapsed: 0.032 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <false> but was: <fALSE>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -15,7 +15,7 @@ org.opentest4j.AssertionFailedError: expected: <false> but was: <fALSE>
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-lexer.LexerCoolTest.testKeywordCaseInsensitivity -- Time elapsed: 0.003 s <<< FAILURE!
+lexer.LexerCoolTest.testKeywordCaseInsensitivity -- Time elapsed: 0.006 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <class> but was: <Class>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -28,7 +28,7 @@ org.opentest4j.AssertionFailedError: expected: <class> but was: <Class>
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-lexer.LexerCoolTest.testLexerAgainstOutputFile -- Time elapsed: 0.035 s <<< FAILURE!
+lexer.LexerCoolTest.testLexerAgainstOutputFile -- Time elapsed: 0.036 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: Erro no tipo de token na linha: 2 ==> expected: <COMMENT> but was: <WHITESPACE>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)

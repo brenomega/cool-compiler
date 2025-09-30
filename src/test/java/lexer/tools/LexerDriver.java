@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 package lexer.tools;
 
 import compiler.Lexer.*;
@@ -64,7 +60,7 @@ public class LexerDriver {
                 Path outputPath = outputDir.resolve(outputFileName);
 
                 if (!Files.exists(inputPath)) {
-                    System.out.println("Arquivo de entrada não encontrado: " + inputPath.toString());
+                    System.out.println("Arquivo de entrada não encontrado: " + inputPath);
                     continue;
                 }
 
@@ -96,12 +92,8 @@ public class LexerDriver {
                         } catch (ArrayIndexOutOfBoundsException ex){
                             int line = lexer.getLine();
                             String msg = String.format(
-<<<<<<< Updated upstream
-                                    "%s: NonAsciiChar - caractere fora do ASCII (0-127) detectado na linha %d.",
+                            "%s: NonAsciiChar - caractere fora do ASCII (0-127) detectado na linha %d.",
                                     ex.getClass().getSimpleName(),
-=======
-                                    "NonAsciiChar - caractere fora do ASCII (0-127) detectado na linha %d.",
->>>>>>> Stashed changes
                                     line
                             );
                             System.out.println(msg);
@@ -139,8 +131,4 @@ public class LexerDriver {
             scanner.close();
         }
     }
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes

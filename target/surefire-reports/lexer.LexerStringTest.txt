@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: lexer.LexerStringTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.041 s <<< FAILURE! -- in lexer.LexerStringTest
-lexer.LexerStringTest.testStrings -- Time elapsed: 0.004 s <<< ERROR!
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.040 s <<< FAILURE! -- in lexer.LexerStringTest
+lexer.LexerStringTest.testStrings -- Time elapsed: 0.006 s <<< ERROR!
 java.nio.file.NoSuchFileException: src\test\resources\strings\test1.cl
 	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
 	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
