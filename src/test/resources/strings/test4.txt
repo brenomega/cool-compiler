@@ -1,5 +1,1 @@
-"Esta string nao termina
-
-class Test {
-	
-}
+"Esta string nao fecha as aspas

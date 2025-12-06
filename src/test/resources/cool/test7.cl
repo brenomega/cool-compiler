@@ -1,33 +1,23 @@
--- Arquivo de teste 3 com erro de caractere invalido no identificacdor
+(* Arquivo de Teste com Erro em Caractere Inválido *)
 
-class Pessoa{
+class Pessoa {
     nome : String <- "";
-
-    set_nome(n : String) : Pessoa{
-        nome <- n; self
+    set_nome(n : String) : Pessoa {
+        { nome <- n; self; }
     };
-
-    get_nome() : String{
-        nome
-    };
+    get_nome() : String { nome };
 };
 
 class Main inherits IO {
     eu : Pessoa <- new Pessoa;
-    você : Pessoa <- new Pessoa; --caractere invalido no identificador
+
+    -- O ERRO ESPERADO ESTÁ AQUI (Identificador com acento 'ê' não é ASCII):
+    você : Pessoa <- new Pessoa;
 
     main() : Object {
-        (* Inicializando os nomes*)
-        p1 <- p1.set_nome("Andre);  -- Erro : Faltando fecha aspas em String
-        p2 <- p2.set_nome("Carlos");
-
-        (* Escrevendo os nomes *)
-        out_string(p1.get_nome());
-        out_string(" eh amigo de ");
-        out_string(p2.get_nome());
-        out_string("\n");
-
-        0
+        {
+            out_string("Teste de identificador invalido");
+            0;
+        }
     };
-
 };

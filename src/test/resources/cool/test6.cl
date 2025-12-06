@@ -1,4 +1,4 @@
--- Arquivo 6, erro de comentario aninhado inserido
+(* Arquivo de Teste com Erro em Comentário Aninhado *)
 
 (* Este e o inicio de um comentario
     (* este eh o aninhamento de um comentario

@@ -1,5 +1,0 @@
-"Isso \
-esta OK.\n\
-Teste para tab\tfuncionou.\n\
-Teste para barra invertida \\ funcionou.\n\
-Teste para aspas \" funcionou."
