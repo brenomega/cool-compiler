@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+.idea/
+.project
+.classpath
+.settings/
+<<<<<<< Updated upstream
+target/
+=======
+>>>>>>> Stashed changes
