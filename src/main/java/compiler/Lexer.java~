@@ -303,26 +303,26 @@ public class Lexer implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
-    // CONSTANTES
+    // Constantes
     private static final int STRING_MAX_LENGTH = 1024;
 
-    // BUFFERS
+    // Buffers para comentários e strings
     private int commentDepth = 0;
     private StringBuilder commentBuffer = new StringBuilder();
     private StringBuilder stringBuffer = new StringBuilder();
 
-    // MÉTODOS AUXILIARES PARA CUP
-    // Cria um símbolo sem valor (apenas o tipo)
+    // Métodos auxiliares para o JCup
+    // Cria um símbolo sem valor
     private Symbol symbol(int type) {
         return new Symbol(type, yyline + 1, yycolumn + 1);
     }
 
-    // Cria um símbolo com valor (ex: String, Integer, Boolean)
+    // Cria um símbolo com valor
     private Symbol symbol(int type, Object value) {
         return new Symbol(type, yyline + 1, yycolumn + 1, value);
     }
 
-    // MAPA DE PALAVRAS-CHAVE (String -> Constante inteira da classe sym)
+    // HashMap de Keywords
     private static final Map<String, Integer> KEYWORDS = new HashMap<>();
     static {
        KEYWORDS.put("class", sym.CLASS);
@@ -342,12 +342,12 @@ public class Lexer implements java_cup.runtime.Scanner {
        KEYWORDS.put("new", sym.NEW);
        KEYWORDS.put("of", sym.OF);
        KEYWORDS.put("not", sym.NOT);
-       // True e False são tratados especialmente na lógica, mas mapeados aqui para referência
+       // True e False tem um tratamento exclusivo mas são mapeados aqui para referência
        KEYWORDS.put("true", sym.TRUE);
        KEYWORDS.put("false", sym.FALSE);
     }
 
-    // EXCEPTIONS (Mantidas do seu código original)
+    // Exceptions
     public class LexicalException extends RuntimeException {
        private static final long serialVersionUID = 1L;
        public LexicalException(String message) { super(message); }
@@ -383,7 +383,7 @@ public class Lexer implements java_cup.runtime.Scanner {
        public IntegerOutOfRangeException(String message) { super(message); }
     }
 
-    // UTILITÁRIO DE ESCAPE STRING
+    // Escape de strings
     private String unescape(String s) {
        StringBuilder sb = new StringBuilder();
        for (int i = 0; i < s.length(); i++) {
@@ -937,17 +937,15 @@ public class Lexer implements java_cup.runtime.Scanner {
         String lowerText = text.toLowerCase();
         Integer symCode = KEYWORDS.get(lowerText);
 
-        // Regra especial para TRUE/FALSE (Case Sensitive na primeira letra para ser keyword)
+        // Case Sensitive para TRUE/FALSE na primeira letra para ser keyword
         if (symCode != null && (symCode == sym.TRUE || symCode == sym.FALSE)) {
             if (Character.isLowerCase(text.charAt(0))) {
-                // 'true' ou 'false' minúsculos -> Keyword booleana
                 return symbol(symCode, symCode == sym.TRUE);
             }
-            // 'True' ou 'False' -> TYPEID (porque começa com maiúscula)
             return symbol(sym.TYPEID, text);
         }
 
-        // Outras Keywords (Case Insensitive)
+        // Keywords Case Insensitive
         if (symCode != null) {
             return symbol(symCode);
         }
@@ -1039,13 +1037,12 @@ public class Lexer implements java_cup.runtime.Scanner {
         commentBuffer.append(yytext());
         if (commentDepth == 0) {
             yybegin(YYINITIAL);
-            // Comentário fechou, não retornamos token, apenas voltamos a escanear
         }
             }
           // fall through
           case 68: break;
           case 33:
-            { // Sequência de escape desconhecida (ex: \c) vira apenas o caractere (c)
+            { // Sequência de escape desconhecida (ex: \c vira apenas o caractere (c))
         if (stringBuffer.length() + 1 > STRING_MAX_LENGTH) {
            throw new StringTooLongException("String excede 1024 caracteres na linha " + (yyline+1));
         }

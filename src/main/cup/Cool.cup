@@ -12,9 +12,9 @@ parser code {:
         if (info instanceof java_cup.runtime.Symbol) {
             java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
             if (s.left >= 0) {
-                m.append(" na linha " + (s.left+1));
+                m.append(" na linha " + (s.left));
                 if (s.right >= 0)
-                    m.append(", coluna " + (s.right+1));
+                    m.append(", coluna " + (s.right));
             }
             if (s.value != null) {
                 m.append(". Token inesperado: " + s.value);
@@ -28,6 +28,13 @@ parser code {:
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
         System.exit(1);
+    }
+
+    public void checkNotSelf(String id, int line, int col) {
+        if ("self".equals(id)) {
+            java_cup.runtime.Symbol s = new java_cup.runtime.Symbol(sym.ID, line, col, id);
+            report_fatal_error("Uso ilegal de 'self' como identificador", s);
+        }
     }
 :};
 
@@ -90,9 +97,11 @@ feature ::=
       ID:name LPAREN formal_list RPAREN COLON TYPEID:type LBRACE expr RBRACE SEMI
       {: System.out.println(" - Método: " + name + " retorna " + type); :}
     | ID:name COLON TYPEID:type ASSIGN expr SEMI
-      {: System.out.println(" - Atributo: " + name + " : " + type); :}
+      {: System.out.println(" - Atributo: " + name + " : " + type);
+         checkNotSelf(name, nameleft, nameright);  :}
     | ID:name COLON TYPEID:type SEMI
-      {: System.out.println(" - Atributo: " + name + " : " + type); :}
+      {: System.out.println(" - Atributo: " + name + " : " + type);
+         checkNotSelf(name, nameleft, nameright);  :}
     ;
 
 formal_list ::= /* vazio */
@@ -101,6 +110,7 @@ formal_list ::= /* vazio */
     ;
 
 formal ::= ID:name COLON TYPEID:type
+    {: checkNotSelf(name, nameleft, nameright); :}
     ;
 
 expr_list ::= expr SEMI
@@ -112,20 +122,25 @@ case_list ::= case_branch
     ;
 
 case_branch ::= ID:id COLON TYPEID:type DARROW expr SEMI
+    {: checkNotSelf(id, idleft, idright); :}
     ;
 
 argument_list ::= expr
     | argument_list COMMA expr
     ;
 
-let_list ::= ID COLON TYPEID
-    | ID COLON TYPEID ASSIGN expr
-    | let_list COMMA ID COLON TYPEID
-    | let_list COMMA ID COLON TYPEID ASSIGN expr
+let_list ::= ID:id COLON TYPEID
+      {: checkNotSelf(id, idleft, idright); :}
+    | ID:id COLON TYPEID ASSIGN expr
+      {: checkNotSelf(id, idleft, idright); :}
+    | let_list COMMA ID:id COLON TYPEID
+      {: checkNotSelf(id, idleft, idright); :}
+    | let_list COMMA ID:id COLON TYPEID ASSIGN expr
+      {: checkNotSelf(id, idleft, idright); :}
     ;
 
 expr ::=
-      ID:id ASSIGN expr
+      ID:id ASSIGN expr {: checkNotSelf(id, idleft, idright); :}
     | expr AT TYPEID DOT ID LPAREN RPAREN
     | expr AT TYPEID DOT ID LPAREN argument_list RPAREN
     | expr DOT ID LPAREN RPAREN
@@ -135,9 +150,14 @@ expr ::=
     | IF expr THEN expr ELSE expr FI
     | WHILE expr LOOP expr POOL
     | LBRACE expr_list RBRACE
-    | LET ID COLON TYPEID IN expr
-    | LET ID COLON TYPEID ASSIGN expr IN expr
-    | LET ID COLON TYPEID COMMA let_list IN expr
+    | LET ID:id COLON TYPEID IN expr
+      {: checkNotSelf(id, idleft, idright); :}
+    | LET ID:id COLON TYPEID ASSIGN expr IN expr
+      {: checkNotSelf(id, idleft, idright); :}
+    | LET ID:id COLON TYPEID COMMA let_list IN expr
+      {: checkNotSelf(id, idleft, idright); :}
+    | LET ID:id COLON TYPEID ASSIGN expr COMMA let_list IN expr
+      {: checkNotSelf(id, idleft, idright); :}
     | CASE expr OF case_list ESAC
     | NEW TYPEID
     | ISVOID expr
