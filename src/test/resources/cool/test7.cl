@@ -1,7 +1,7 @@
-(* Arquivo de Teste com Erro em Caractere Inválido *)
+(* Arquivo de Teste com Erro: palavra reservada como identificador *)
 
 class Pessoa {
-    nome : String <- "";
+    self : String <- "";
     set_nome(n : String) : Pessoa {
         { nome <- n; self; }
     };
@@ -10,9 +10,7 @@ class Pessoa {
 
 class Main inherits IO {
     eu : Pessoa <- new Pessoa;
-
-    -- O ERRO ESPERADO ESTÁ AQUI (Identificador com acento 'ê' não é ASCII):
-    você : Pessoa <- new Pessoa;
+    voce : Pessoa <- new Pessoa;
 
     main() : Object {
         {
