@@ -48,7 +48,7 @@ public class Main {
 
         } catch (Exception e) {
             System.err.println("\nErro encontrado durante a execução.");
-            e.printStackTrace();
+            System.err.println(e.toString());
         } finally {
             console.close();
         }

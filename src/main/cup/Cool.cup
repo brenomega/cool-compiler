@@ -12,9 +12,9 @@ parser code {:
         if (info instanceof java_cup.runtime.Symbol) {
             java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
             if (s.left >= 0) {
-                m.append(" na linha " + (s.left+1));
+                m.append(" na linha " + (s.left));
                 if (s.right >= 0)
-                    m.append(", coluna " + (s.right+1));
+                    m.append(", coluna " + (s.right));
             }
             if (s.value != null) {
                 m.append(". Token inesperado: " + s.value);
@@ -28,6 +28,13 @@ parser code {:
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
         System.exit(1);
+    }
+
+    public void checkNotSelf(String id, int line, int col) {
+        if ("self".equals(id)) {
+            java_cup.runtime.Symbol s = new java_cup.runtime.Symbol(sym.ID, line, col, id);
+            report_fatal_error("Uso ilegal de 'self' como identificador", s);
+        }
     }
 :};
 
@@ -90,9 +97,11 @@ feature ::=
       ID:name LPAREN formal_list RPAREN COLON TYPEID:type LBRACE expr RBRACE SEMI
       {: System.out.println(" --- Método: " + name + " retorna " + type); :}
     | ID:name COLON TYPEID:type ASSIGN expr SEMI
-      {: System.out.println(" --- Atributo: " + name + " : " + type); :}
+      {: System.out.println(" --- Atributo: " + name + " : " + type);
+         checkNotSelf(name, nameleft, nameright);  :}
     | ID:name COLON TYPEID:type SEMI
-      {: System.out.println(" --- Atributo: " + name + " : " + type); :}
+      {: System.out.println(" --- Atributo: " + name + " : " + type);
+         checkNotSelf(name, nameleft, nameright);  :}
     ;
 
 formal_list ::= /* vazio */
@@ -101,7 +110,8 @@ formal_list ::= /* vazio */
     ;
 
 formal ::= ID:name COLON TYPEID:type
-    {: System.out.println("    (Parametro formal: " + name + " : " + type + ")"); :}
+    {: System.out.println("    (Parametro formal: " + name + " : " + type + ")");
+    checkNotSelf(name, nameleft, nameright); :}
     ;
 
 expr_list ::= expr SEMI
@@ -113,7 +123,8 @@ case_list ::= case_branch
     ;
 
 case_branch ::= ID:id COLON TYPEID:type DARROW expr SEMI
-    {: System.out.println("    |-- Case Branch: " + id + " como " + type); :}
+    {: System.out.println("    |-- Case Branch: " + id + " como " + type);
+     checkNotSelf(id, idleft, idright); :}
     ;
 
 argument_list ::= expr
@@ -121,20 +132,25 @@ argument_list ::= expr
     ;
 
 let_list ::= ID:id COLON TYPEID:type
-    {: System.out.println("    |-- Var Let: " + id + " : " + type); :}
+    {: System.out.println("    |-- Var Let: " + id + " : " + type);
+     checkNotSelf(id, idleft, idright); :}
 
     | ID:id COLON TYPEID:type ASSIGN expr
-    {: System.out.println("    |-- Var Let (com init): " + id); :}
+    {: System.out.println("    |-- Var Let (com init): " + id);
+    checkNotSelf(id, idleft, idright); :}
 
     | let_list COMMA ID:id COLON TYPEID:type
-    {: System.out.println("    |-- Var Let: " + id); :}
+    {: System.out.println("    |-- Var Let: " + id);
+    checkNotSelf(id, idleft, idright); :}
     | let_list COMMA ID:id COLON TYPEID:type ASSIGN expr
-    {: System.out.println("    |-- Var Let (com init): " + id); :}
+    {: System.out.println("    |-- Var Let (com init): " + id);
+    {: checkNotSelf(id, idleft, idright); :}
     ;
 
 expr ::=
       ID:id ASSIGN expr
-      {: System.out.println("    |-- Atribuicao para variavel: " + id); :}
+      {: System.out.println("    |-- Atribuicao para variavel: " + id);
+      checkNotSelf(id, idleft, idright); :}
     | expr AT TYPEID:type DOT ID:id LPAREN RPAREN
     {: System.out.println("    |-- Static Dispatch @" + type + "." + id + "()"); :}
     | expr AT TYPEID:type DOT ID:id LPAREN argument_list RPAREN
@@ -154,11 +170,14 @@ expr ::=
     | LBRACE expr_list RBRACE
     {: System.out.println("    |-- Bloco de codigo { ... }"); :}
     | LET ID:id COLON TYPEID IN expr
-    {: System.out.println("    |-- Estrutura LET simples (" + id + ")"); :}
+    {: System.out.println("    |-- Estrutura LET simples (" + id + ")");
+     checkNotSelf(id, idleft, idright); :}
     | LET ID:id COLON TYPEID ASSIGN expr IN expr
-    {: System.out.println("    |-- Estrutura LET com init (" + id + ")"); :}
+    {: System.out.println("    |-- Estrutura LET com init (" + id + ")");
+     checkNotSelf(id, idleft, idright); :}
     | LET ID:id COLON TYPEID COMMA let_list IN expr
-    {: System.out.println("    |-- Estrutura LET multiplo (" + id + ", ...)"); :}
+    {: System.out.println("    |-- Estrutura LET multiplo (" + id + ", ...)");
+     checkNotSelf(id, idleft, idright); :}
     | CASE expr OF case_list ESAC
     {: System.out.println("    |-- Estrutura CASE"); :}
     | NEW TYPEID:type

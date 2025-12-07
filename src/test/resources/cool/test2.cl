@@ -2,7 +2,7 @@
 
 class Main inherits IO {
 
-    nome     : String;
+    name     : String;
     primeiro : Int;
     segundo  : Int;
     media    : Int;
@@ -11,7 +11,7 @@ class Main inherits IO {
         {
             -- Entrada do usuario
             out_string("Digite seu nome: ");
-            nome <- in_string();
+            name <- in_string();
 
             out_string("Digite o primeiro inteiro: ");
             primeiro <- in_int();
