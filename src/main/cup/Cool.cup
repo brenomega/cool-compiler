@@ -69,7 +69,7 @@ precedence left DOT;
 start with program;
 
 program ::= class_list
-    {: System.out.println("Análise Sintática Concluída com Sucesso!"); :}
+    {: System.out.println("=== Análise Sintática Concluída com Sucesso! ==="); :}
     ;
 
 class_list ::= class_decl
@@ -77,9 +77,9 @@ class_list ::= class_decl
     ;
 
 class_decl ::= CLASS TYPEID:n LBRACE feature_list RBRACE SEMI
-    {: System.out.println("Classe detectada: " + n); :}
+    {: System.out.println("[CLASSE] Definida: " + n); :}
     | CLASS TYPEID:n INHERITS TYPEID:p LBRACE feature_list RBRACE SEMI
-    {: System.out.println("Classe detectada: " + n + " herda de " + p); :}
+    {: System.out.println("[CLASSE] Definida: " + n + " herda de " + p); :}
     ;
 
 feature_list ::= /* vazio */
@@ -88,11 +88,11 @@ feature_list ::= /* vazio */
 
 feature ::=
       ID:name LPAREN formal_list RPAREN COLON TYPEID:type LBRACE expr RBRACE SEMI
-      {: System.out.println(" - Método: " + name + " retorna " + type); :}
+      {: System.out.println(" --- Método: " + name + " retorna " + type); :}
     | ID:name COLON TYPEID:type ASSIGN expr SEMI
-      {: System.out.println(" - Atributo: " + name + " : " + type); :}
+      {: System.out.println(" --- Atributo: " + name + " : " + type); :}
     | ID:name COLON TYPEID:type SEMI
-      {: System.out.println(" - Atributo: " + name + " : " + type); :}
+      {: System.out.println(" --- Atributo: " + name + " : " + type); :}
     ;
 
 formal_list ::= /* vazio */
@@ -101,6 +101,7 @@ formal_list ::= /* vazio */
     ;
 
 formal ::= ID:name COLON TYPEID:type
+    {: System.out.println("    (Parametro formal: " + name + " : " + type + ")"); :}
     ;
 
 expr_list ::= expr SEMI
@@ -112,48 +113,85 @@ case_list ::= case_branch
     ;
 
 case_branch ::= ID:id COLON TYPEID:type DARROW expr SEMI
+    {: System.out.println("    |-- Case Branch: " + id + " como " + type); :}
     ;
 
 argument_list ::= expr
     | argument_list COMMA expr
     ;
 
-let_list ::= ID COLON TYPEID
-    | ID COLON TYPEID ASSIGN expr
-    | let_list COMMA ID COLON TYPEID
-    | let_list COMMA ID COLON TYPEID ASSIGN expr
+let_list ::= ID:id COLON TYPEID:type
+    {: System.out.println("    |-- Var Let: " + id + " : " + type); :}
+
+    | ID:id COLON TYPEID:type ASSIGN expr
+    {: System.out.println("    |-- Var Let (com init): " + id); :}
+
+    | let_list COMMA ID:id COLON TYPEID:type
+    {: System.out.println("    |-- Var Let: " + id); :}
+    | let_list COMMA ID:id COLON TYPEID:type ASSIGN expr
+    {: System.out.println("    |-- Var Let (com init): " + id); :}
     ;
 
 expr ::=
       ID:id ASSIGN expr
-    | expr AT TYPEID DOT ID LPAREN RPAREN
-    | expr AT TYPEID DOT ID LPAREN argument_list RPAREN
-    | expr DOT ID LPAREN RPAREN
-    | expr DOT ID LPAREN argument_list RPAREN
-    | ID LPAREN RPAREN
-    | ID LPAREN argument_list RPAREN
+      {: System.out.println("    |-- Atribuicao para variavel: " + id); :}
+    | expr AT TYPEID:type DOT ID:id LPAREN RPAREN
+    {: System.out.println("    |-- Static Dispatch @" + type + "." + id + "()"); :}
+    | expr AT TYPEID:type DOT ID:id LPAREN argument_list RPAREN
+    {: System.out.println("    |-- Static Dispatch @" + type + "." + id + "(...)"); :}
+    | expr DOT ID:id LPAREN RPAREN
+    {: System.out.println("    |-- Dispatch para metodo: " + id + "()"); :}
+    | expr DOT ID:id LPAREN argument_list RPAREN
+    {: System.out.println("    |-- Dispatch para metodo: " + id + "(args...)"); :}
+    | ID:id LPAREN RPAREN
+    {: System.out.println("    |-- Chamada Self: " + id + "()"); :}
+    | ID:id LPAREN argument_list RPAREN
+    {: System.out.println("    |-- Chamada Self: " + id + "(args...)"); :}
     | IF expr THEN expr ELSE expr FI
+    {: System.out.println("    |-- Estrutura Condicional (IF-THEN-ELSE)"); :}
     | WHILE expr LOOP expr POOL
+    {: System.out.println("    |-- Estrutura de Repeticao (WHILE)"); :}
     | LBRACE expr_list RBRACE
-    | LET ID COLON TYPEID IN expr
-    | LET ID COLON TYPEID ASSIGN expr IN expr
-    | LET ID COLON TYPEID COMMA let_list IN expr
+    {: System.out.println("    |-- Bloco de codigo { ... }"); :}
+    | LET ID:id COLON TYPEID IN expr
+    {: System.out.println("    |-- Estrutura LET simples (" + id + ")"); :}
+    | LET ID:id COLON TYPEID ASSIGN expr IN expr
+    {: System.out.println("    |-- Estrutura LET com init (" + id + ")"); :}
+    | LET ID:id COLON TYPEID COMMA let_list IN expr
+    {: System.out.println("    |-- Estrutura LET multiplo (" + id + ", ...)"); :}
     | CASE expr OF case_list ESAC
-    | NEW TYPEID
+    {: System.out.println("    |-- Estrutura CASE"); :}
+    | NEW TYPEID:type
+    {: System.out.println("    |-- New (Instancia de " + type + ")"); :}
     | ISVOID expr
+    {: System.out.println("    |-- Teste ISVOID"); :}
     | NEG expr
+    {: System.out.println("    |-- Operacao de Negacao (~)"); :}
     | NOT expr
+    {: System.out.println("    |-- Operacao NOT"); :}
     | expr PLUS expr
+    {: System.out.println("    |-- Operacao SOMA (+)"); :}
     | expr MINUS expr
+    {: System.out.println("    |-- Operacao SUBTRACAO (-)"); :}
     | expr MULT expr
+    {: System.out.println("    |-- Operacao MULTIPLICACAO (*)"); :}
     | expr DIV expr
+    {: System.out.println("    |-- Operacao DIVISAO (/)"); :}
     | expr LT expr
+    {: System.out.println("    |-- Comparacao MENOR QUE (<)"); :}
     | expr LE expr
+    {: System.out.println("    |-- Comparacao MENOR IGUAL (<=)"); :}
     | expr EQ expr
+    {: System.out.println("    |-- Comparacao IGUAL (=)"); :}
     | LPAREN expr RPAREN
-    | ID
-    | INT_CONST
-    | STR_CONST
+    | ID:id
+    {: System.out.println("    |-- ID lido: " + id); :}
+    | INT_CONST:val
+    {: System.out.println("    |-- Inteiro lido: " + val); :}
+    | STR_CONST:s
+    {: System.out.println("    |-- String lida: \"" + s + "\""); :}
     | TRUE
+    {: System.out.println("    |-- Booleano: true"); :}
     | FALSE
+    {: System.out.println("    |-- Booleano: false"); :}
     ;
