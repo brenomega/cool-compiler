@@ -144,7 +144,7 @@ let_list ::= ID:id COLON TYPEID:type
     checkNotSelf(id, idleft, idright); :}
     | let_list COMMA ID:id COLON TYPEID:type ASSIGN expr
     {: System.out.println("    |-- Var Let (com init): " + id);
-    {: checkNotSelf(id, idleft, idright); :}
+     checkNotSelf(id, idleft, idright); :}
     ;
 
 expr ::=
